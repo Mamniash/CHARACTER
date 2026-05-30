@@ -1,98 +1,162 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Заметки</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
     }
 
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #1a1a2a;
-      color: #d0d0e8;
-      height: 100vh;
+      background: #16162a;
+      color: #cccce8;
       display: flex;
       flex-direction: column;
-      padding: 14px;
-      gap: 10px;
     }
 
+    /* ── Header ── */
     header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      gap: 8px;
+      padding: 9px 10px 9px 14px;
+      background: #111120;
+      border-bottom: 1px solid #252538;
       flex-shrink: 0;
     }
 
     #token-name {
-      font-size: 13px;
+      flex: 1;
+      font-size: 12px;
       font-weight: 600;
-      color: #8080a8;
+      color: #7070a0;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      white-space: nowrap;
+      letter-spacing: 0.7px;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 240px;
+      white-space: nowrap;
+    }
+
+    #close-btn {
+      background: none;
+      border: none;
+      color: #404060;
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1;
+      padding: 3px 5px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+      flex-shrink: 0;
+    }
+    #close-btn:hover { color: #c0c0e0; background: #22223a; }
+
+    /* ── Textarea ── */
+    #notes {
+      flex: 1;
+      background: #16162a;
+      border: none;
+      color: #cccce8;
+      font-family: inherit;
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 14px;
+      resize: none;
+      outline: none;
+    }
+
+    /* ── Footer ── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 7px 10px 7px 14px;
+      background: #111120;
+      border-top: 1px solid #252538;
+      flex-shrink: 0;
+      position: relative;
     }
 
     #status {
       font-size: 11px;
-      color: #404060;
-      flex-shrink: 0;
-      transition: color 0.3s;
+      color: #383858;
+      transition: color 0.25s;
+      min-width: 90px;
+    }
+    #status.saving { color: #b09020; }
+    #status.saved  { color: #30a060; }
+    #status.error  { color: #a03030; }
+
+    #save-btn {
+      background: #222240;
+      border: 1px solid #333360;
+      border-radius: 5px;
+      color: #8888c0;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 4px 14px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    #save-btn:hover {
+      background: #303060;
+      border-color: #4040a0;
+      color: #c0c0f0;
     }
 
-    #status.saving {
-      color: #c0a020;
+    /* ── Resize handle ── */
+    #resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 18px;
+      height: 18px;
+      cursor: nwse-resize;
+      opacity: 0.25;
+      transition: opacity 0.2s;
     }
+    #resize-handle:hover { opacity: 0.7; }
 
-    #status.saved {
-      color: #40a060;
+    /* diagonal lines */
+    #resize-handle::before,
+    #resize-handle::after {
+      content: "";
+      position: absolute;
+      right: 3px;
+      background: #a0a0c8;
+      border-radius: 1px;
     }
-
-    #notes {
-      flex: 1;
-      background: #11111e;
-      border: 1px solid #2a2a40;
-      border-radius: 8px;
-      color: #d0d0e8;
-      font-family: inherit;
-      font-size: 13px;
-      line-height: 1.65;
-      padding: 12px;
-      resize: none;
-      outline: none;
-      transition: border-color 0.2s;
+    #resize-handle::before {
+      bottom: 7px; width: 10px; height: 1.5px;
+      transform: rotate(45deg);
     }
-
-    #notes:focus {
-      border-color: #3a3a60;
-    }
-
-    #notes::placeholder {
-      color: #303050;
+    #resize-handle::after {
+      bottom: 4px; width: 6px; height: 1.5px;
+      transform: rotate(45deg);
     }
   </style>
-  <script type="module" crossorigin src="/assets/popover-BLukTrW-.js"></script>
+  <script type="module" crossorigin src="/assets/popover-DdTSJb59.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/lib-DGRDy4UO.js">
 </head>
 <body>
   <header>
     <div id="token-name">Заметки</div>
-    <span id="status"></span>
+    <button id="close-btn" title="Закрыть">✕</button>
   </header>
-  <textarea
-    id="notes"
-    placeholder="Золото, предметы, эффекты...
 
-Пиши что угодно."
-  ></textarea>
+  <textarea id="notes"></textarea>
+
+  <footer>
+    <span id="status"></span>
+    <button id="save-btn">Сохранить</button>
+    <div id="resize-handle"></div>
+  </footer>
 
 </body>
 </html>
