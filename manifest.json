@@ -3,7 +3,5 @@
   "version": "1.0.0",
   "manifest_version": 1,
   "description": "Простые заметки для каждого токена — инвентарь, золото, эффекты",
-  "background": {
-    "href": "/background.html"
-  }
+  "background_url": "/background.html"
 }
