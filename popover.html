@@ -13,12 +13,16 @@
       display: flex; flex-direction: column;
     }
 
+    /* remove ugly number spinners everywhere */
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
     /* ── Header ── */
     header {
       display: flex; align-items: center; gap: 8px;
       padding: 7px 8px 7px 14px;
-      background: #111120; border-bottom: 1px solid #252538;
-      flex-shrink: 0;
+      background: #111120; border-bottom: 1px solid #252538; flex-shrink: 0;
     }
     #token-name {
       flex: 1; font-size: 12px; font-weight: 600;
@@ -31,34 +35,26 @@
     }
     #status.show { opacity: 1; }
     #status.error { color: #a03030; }
-
     #save-btn {
-      background: #222240; border: 1px solid #333360;
-      border-radius: 5px; color: #8888c0; cursor: pointer;
-      font-size: 11.5px; padding: 4px 12px; flex-shrink: 0;
-      transition: background .15s, color .15s, border-color .15s;
+      background: #222240; border: 1px solid #333360; border-radius: 5px;
+      color: #8888c0; cursor: pointer; font-size: 11.5px; padding: 4px 12px;
+      flex-shrink: 0; transition: background .15s, color .15s, border-color .15s;
     }
     #save-btn:hover { background: #303060; border-color: #4040a0; color: #c0c0f0; }
-
     #close-btn {
-      background: none; border: none; color: #404060;
-      cursor: pointer; font-size: 15px; line-height: 1;
-      padding: 3px 5px; border-radius: 4px; flex-shrink: 0;
-      transition: color .15s, background .15s;
+      background: none; border: none; color: #404060; cursor: pointer;
+      font-size: 15px; line-height: 1; padding: 3px 5px; border-radius: 4px;
+      flex-shrink: 0; transition: color .15s, background .15s;
     }
     #close-btn:hover { color: #c0c0e0; background: #22223a; }
 
     /* ── Tabs ── */
-    .tabs {
-      display: flex; background: #111120;
-      border-bottom: 1px solid #252538; flex-shrink: 0;
-    }
+    .tabs { display: flex; background: #111120; border-bottom: 1px solid #252538; flex-shrink: 0; }
     .tab {
-      background: none; border: none; color: #555578;
-      cursor: pointer; font-size: 11.5px; font-weight: 600;
-      letter-spacing: .4px; padding: 8px 14px;
-      border-bottom: 2px solid transparent;
-      transition: color .15s, border-color .15s;
+      background: none; border: none; color: #555578; cursor: pointer;
+      font-size: 11px; font-weight: 600; letter-spacing: .3px; padding: 8px 12px;
+      border-bottom: 2px solid transparent; transition: color .15s, border-color .15s;
+      white-space: nowrap;
     }
     .tab:hover { color: #9090c0; }
     .tab.active { color: #c0c0f0; border-bottom-color: #5050a0; }
@@ -68,132 +64,183 @@
     .panel.active { display: flex; flex-direction: column; }
 
     #notes {
-      flex: 1; background: #16162a; border: none;
-      color: #cccce8; font-family: inherit; font-size: 13px;
-      line-height: 1.7; padding: 14px; resize: none; outline: none;
+      flex: 1; background: #16162a; border: none; color: #cccce8;
+      font-family: inherit; font-size: 13px; line-height: 1.7;
+      padding: 14px; resize: none; outline: none;
     }
 
-    #panel-counters { padding: 14px; }
+    #panel-counters, #panel-stats { padding: 14px; }
 
     .section { margin-bottom: 18px; }
     .section-head {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 9px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px;
     }
     .section-title {
       font-size: 10px; font-weight: 700; color: #5a5a82;
-      text-transform: uppercase; letter-spacing: 1px;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px;
     }
+    .section-head .section-title { margin-bottom: 0; }
 
-    /* ── Inspiration (top-right) ── */
-    .insp-bar {
+    /* ── Inspiration / proficiency top bars ── */
+    .top-bar {
       display: flex; align-items: center; justify-content: flex-end;
       gap: 9px; margin-bottom: 14px;
     }
-    .insp-label {
-      font-size: 10px; font-weight: 700; color: #6a6a40;
-      text-transform: uppercase; letter-spacing: 1px;
+    .top-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
     }
+    .insp-label { color: #6a6a40; }
+    .prof-label { color: #5a5a82; }
     .insp-val {
-      min-width: 26px; text-align: center;
-      font-size: 18px; font-weight: 700; color: #e0c060;
-      font-variant-numeric: tabular-nums;
+      min-width: 26px; text-align: center; font-size: 18px; font-weight: 700;
+      color: #e0c060; font-variant-numeric: tabular-nums;
     }
+    .prof-input {
+      width: 46px; background: #16162c; border: 1px solid #2a2a44; border-radius: 5px;
+      color: #d8d8f0; font-family: inherit; font-size: 15px; font-weight: 700;
+      text-align: center; padding: 4px; outline: none;
+    }
+    .prof-input:focus { border-color: #4040a0; }
 
     /* ── Steppers ── */
     .stepper { display: flex; align-items: center; gap: 5px; }
     .step-btn {
-      width: 22px; height: 22px;
-      background: #222240; border: 1px solid #303058;
-      color: #9090c0; border-radius: 5px; cursor: pointer;
-      font-size: 14px; line-height: 1;
+      width: 22px; height: 22px; background: #222240; border: 1px solid #303058;
+      color: #9090c0; border-radius: 5px; cursor: pointer; font-size: 14px; line-height: 1;
       display: flex; align-items: center; justify-content: center;
-      transition: background .12s, color .12s;
-      user-select: none; flex-shrink: 0;
+      transition: background .12s, color .12s; user-select: none; flex-shrink: 0;
     }
     .step-btn:hover { background: #303060; color: #d0d0f0; }
     .step-btn:active { background: #3a3a72; }
     .count-val {
-      min-width: 18px; text-align: center;
-      font-size: 13px; font-weight: 600; color: #d8d8f0;
-      font-variant-numeric: tabular-nums;
+      min-width: 18px; text-align: center; font-size: 13px; font-weight: 600;
+      color: #d8d8f0; font-variant-numeric: tabular-nums;
     }
     .level-stepper .step-btn { width: 20px; height: 20px; font-size: 13px; }
 
-    /* ── Money (horizontal coin cards with inputs) ── */
+    /* ── Money ── */
     .money-row { display: flex; gap: 8px; }
     .coin {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 8px;
-      background: #11111e; border: 1px solid #222238;
-      border-radius: 8px; padding: 10px 5px 9px;
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      background: #11111e; border: 1px solid #222238; border-radius: 8px; padding: 10px 5px 9px;
     }
     .coin-icon {
       width: 30px; height: 30px; border-radius: 50%; position: relative;
-      box-shadow:
-        inset 0 0 0 2px rgba(0,0,0,.20),
-        inset 0 2px 3px rgba(255,255,255,.45),
-        inset 0 -3px 4px rgba(0,0,0,.32),
-        0 1px 2px rgba(0,0,0,.5);
+      box-shadow: inset 0 0 0 2px rgba(0,0,0,.20), inset 0 2px 3px rgba(255,255,255,.45),
+        inset 0 -3px 4px rgba(0,0,0,.32), 0 1px 2px rgba(0,0,0,.5);
     }
     .coin-icon::after {
-      content: ""; position: absolute; inset: 5px;
-      border-radius: 50%; border: 1px solid rgba(0,0,0,.18);
+      content: ""; position: absolute; inset: 5px; border-radius: 50%;
+      border: 1px solid rgba(0,0,0,.18);
     }
     .coin-icon.plat { background: radial-gradient(circle at 36% 30%, #f2f5fa, #97a2b8); }
     .coin-icon.gold { background: radial-gradient(circle at 36% 30%, #ffe79a, #b5870f); }
     .coin-icon.silv { background: radial-gradient(circle at 36% 30%, #f0f2f6, #818a98); }
     .coin-icon.copp { background: radial-gradient(circle at 36% 30%, #f2b486, #9c5223); }
     .coin-input {
-      width: 100%; background: #16162c; border: 1px solid #2a2a44;
-      border-radius: 5px; color: #e0e0f4; font-family: inherit;
-      font-size: 14px; font-weight: 600; text-align: center;
-      padding: 4px 2px; outline: none;
-      font-variant-numeric: tabular-nums;
+      width: 100%; background: #16162c; border: 1px solid #2a2a44; border-radius: 5px;
+      color: #e0e0f4; font-family: inherit; font-size: 14px; font-weight: 600;
+      text-align: center; padding: 4px 2px; outline: none; font-variant-numeric: tabular-nums;
     }
     .coin-input:focus { border-color: #4040a0; }
-    .coin-input::-webkit-inner-spin-button { opacity: 0; width: 0; }
 
-    /* ── Spell slots (single column) ── */
+    /* ── Spell slots / hit dice rows ── */
     .slot-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
     .slot-row.empty { opacity: .45; }
     .slot-label { font-size: 12px; color: #9090b8; width: 52px; flex-shrink: 0; }
     .slash { color: #44446a; font-size: 13px; }
     .slot-max {
-      width: 38px; background: #11111e; border: 1px solid #2a2a40;
-      border-radius: 4px; color: #cccce8; font-family: inherit;
-      font-size: 12px; text-align: center; padding: 3px; outline: none;
+      width: 40px; background: #11111e; border: 1px solid #2a2a40; border-radius: 4px;
+      color: #d8d8f0; font-family: inherit; font-size: 13px; font-weight: 600;
+      text-align: center; padding: 3px; outline: none; font-variant-numeric: tabular-nums;
     }
     .slot-max:focus { border-color: #4040a0; }
-    .slot-max::-webkit-inner-spin-button { opacity: .3; }
+    .die-select {
+      background: #16162c; border: 1px solid #2a2a44; border-radius: 5px;
+      color: #cccce8; font-family: inherit; font-size: 12px; padding: 3px 6px; outline: none;
+    }
+
+    /* ── Death saves ── */
+    .death-row { display: flex; align-items: center; gap: 10px; padding: 3px 0; }
+    .death-label { font-size: 12px; color: #9090b8; width: 64px; flex-shrink: 0; }
+    .pips { display: flex; gap: 7px; }
+    .pip {
+      font-size: 18px; cursor: pointer; line-height: 1; user-select: none;
+      transition: color .12s, transform .1s;
+    }
+    .pip:active { transform: scale(.85); }
+    .pip.succ { color: #2e2e44; }
+    .pip.succ.on { color: #4caf6a; }
+    .pip.fail { color: #2e2e44; }
+    .pip.fail.on { color: #c0504a; }
 
     /* ── Custom counters ── */
-    .custom-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+    .custom-row { display: flex; align-items: center; gap: 7px; padding: 3px 0; }
+    .drag-handle {
+      color: #353556; cursor: grab; font-size: 13px; flex-shrink: 0;
+      user-select: none; padding: 0 1px; letter-spacing: -2px;
+    }
+    .drag-handle:active { cursor: grabbing; }
+    .custom-row.dragging { opacity: .4; }
     .custom-name {
-      flex: 1; min-width: 0; background: #11111e; border: 1px solid #2a2a40;
-      border-radius: 5px; color: #cccce8; font-family: inherit;
-      font-size: 12px; padding: 4px 8px; outline: none;
+      flex: 1; min-width: 0; background: #11111e; border: 1px solid #2a2a40; border-radius: 5px;
+      color: #cccce8; font-family: inherit; font-size: 12px; padding: 4px 8px; outline: none;
     }
     .custom-name:focus { border-color: #4040a0; }
     .custom-name::placeholder { color: #333352; }
     .del-btn {
-      width: 22px; height: 22px; background: none; border: none;
-      color: #4a3340; cursor: pointer; font-size: 13px; border-radius: 4px;
-      flex-shrink: 0; transition: color .12s, background .12s;
+      width: 22px; height: 22px; background: none; border: none; color: #4a3340;
+      cursor: pointer; font-size: 13px; border-radius: 4px; flex-shrink: 0;
+      transition: color .12s, background .12s;
     }
     .del-btn:hover { color: #c06070; background: #2a1a22; }
     .add-btn {
-      margin-top: 9px; width: 100%; background: #181830;
-      border: 1px dashed #313158; border-radius: 6px;
-      color: #6a6a98; cursor: pointer; font-size: 12px; padding: 7px;
+      margin-top: 9px; width: 100%; background: #181830; border: 1px dashed #313158;
+      border-radius: 6px; color: #6a6a98; cursor: pointer; font-size: 12px; padding: 7px;
       transition: border-color .15s, color .15s;
     }
     .add-btn:hover { border-color: #5050a0; color: #a0a0d0; }
 
+    /* ── Abilities (Stats tab) ── */
+    .abil-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px; }
+    .abil-card {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      background: #11111e; border: 1px solid #222238; border-radius: 8px; padding: 8px 4px;
+    }
+    .abil-short { font-size: 9.5px; font-weight: 700; color: #6a6a92; letter-spacing: .5px; }
+    .abil-mod {
+      font-size: 20px; font-weight: 700; color: #d8d8f0; line-height: 1;
+      cursor: pointer; border-radius: 5px; padding: 2px 8px; transition: background .12s, color .12s;
+      font-variant-numeric: tabular-nums;
+    }
+    .abil-mod:hover { background: #2a2a4a; color: #e8e8ff; }
+    .abil-score {
+      width: 40px; background: #16162c; border: 1px solid #2a2a44; border-radius: 4px;
+      color: #9898c0; font-family: inherit; font-size: 12px; font-weight: 600;
+      text-align: center; padding: 2px; outline: none;
+    }
+    .abil-score:focus { border-color: #4040a0; }
+
+    .save-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+    .stat-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+    .prof-dot {
+      width: 13px; height: 13px; border-radius: 50%; border: 2px solid #3a3a5c;
+      cursor: pointer; flex-shrink: 0; transition: background .12s, border-color .12s;
+    }
+    .prof-dot.on { background: #6a6ad0; border-color: #6a6ad0; }
+    .roll-mod {
+      min-width: 30px; text-align: center; font-size: 13px; font-weight: 600;
+      color: #c0c0e8; cursor: pointer; border-radius: 4px; padding: 1px 4px;
+      font-variant-numeric: tabular-nums; transition: background .12s, color .12s; flex-shrink: 0;
+    }
+    .roll-mod:hover { background: #2a2a4a; color: #e8e8ff; }
+    .row-name { font-size: 12px; color: #b0b0d0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ab-tag { font-size: 10px; color: #50506e; margin-left: 3px; }
+
     .panel::-webkit-scrollbar { width: 8px; }
     .panel::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 4px; }
   </style>
-  <script type="module" crossorigin src="/assets/popover-X_F4Uc8j.js"></script>
+  <script type="module" crossorigin src="/assets/popover-BIa_R-DY.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/lib-DGRDy4UO.js">
 </head>
 <body>
@@ -207,15 +254,18 @@
   <nav class="tabs">
     <button class="tab active" data-tab="notes">Заметки</button>
     <button class="tab" data-tab="counters">Счётчики</button>
+    <button class="tab" data-tab="stats">Характеристики</button>
   </nav>
 
+  <!-- NOTES -->
   <div class="panel active" id="panel-notes">
     <textarea id="notes"></textarea>
   </div>
 
+  <!-- COUNTERS -->
   <div class="panel" id="panel-counters">
-    <div class="insp-bar">
-      <span class="insp-label">Вдохновение</span>
+    <div class="top-bar">
+      <span class="top-label insp-label">Вдохновение</span>
       <div class="stepper">
         <button class="step-btn" id="insp-minus">−</button>
         <span class="insp-val" id="insp-val">0</span>
@@ -241,9 +291,51 @@
     </div>
 
     <div class="section">
+      <div class="section-title">Спасброски от смерти</div>
+      <div class="death-row">
+        <span class="death-label">Успехи</span>
+        <div class="pips" id="ds-success"></div>
+      </div>
+      <div class="death-row">
+        <span class="death-label">Провалы</span>
+        <div class="pips" id="ds-fail"></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-head">
+        <div class="section-title">Кубы хитов</div>
+        <select class="die-select" id="hd-die">
+          <option>к6</option><option>к8</option><option>к10</option><option>к12</option>
+        </select>
+      </div>
+      <div class="slot-row" id="hd-row"></div>
+    </div>
+
+    <div class="section">
       <div class="section-title">Свои счётчики</div>
       <div id="custom-list"></div>
       <button class="add-btn" id="add-custom">+ счётчик</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="panel" id="panel-stats">
+    <div class="top-bar">
+      <span class="top-label prof-label">Бонус мастерства</span>
+      <input class="prof-input" id="prof-input" type="number" value="2" />
+    </div>
+
+    <div class="abil-grid" id="abil-grid"></div>
+
+    <div class="section">
+      <div class="section-title">Спасброски</div>
+      <div class="save-grid" id="saves-list"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Навыки</div>
+      <div id="skills-list"></div>
     </div>
   </div>
 
