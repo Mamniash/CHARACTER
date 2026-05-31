@@ -6,59 +6,59 @@
   <title>Заметки</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html, body { width: 100%; height: 100%; overflow: hidden; }
-
     body {
       font-family: system-ui, -apple-system, sans-serif;
-      background: #16162a;
-      color: #cccce8;
-      display: flex;
-      flex-direction: column;
+      background: #16162a; color: #cccce8;
+      display: flex; flex-direction: column;
     }
 
     /* ── Header ── */
     header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 8px 8px 14px;
-      background: #111120;
-      border-bottom: 1px solid #252538;
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px 7px 14px;
+      background: #111120; border-bottom: 1px solid #252538;
       flex-shrink: 0;
     }
     #token-name {
-      flex: 1;
-      font-size: 12px;
-      font-weight: 600;
-      color: #7070a0;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      flex: 1; font-size: 12px; font-weight: 600;
+      color: #7070a0; text-transform: uppercase; letter-spacing: .7px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
+    #status {
+      font-size: 10.5px; color: #383858;
+      transition: color .25s; flex-shrink: 0;
+      min-width: 14px; text-align: right;
+    }
+    #status.saving { color: #b09020; }
+    #status.saved  { color: #30a060; }
+    #status.error  { color: #a03030; }
+
+    #save-btn {
+      background: #222240; border: 1px solid #333360;
+      border-radius: 5px; color: #8888c0; cursor: pointer;
+      font-size: 11.5px; padding: 4px 12px; flex-shrink: 0;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    #save-btn:hover { background: #303060; border-color: #4040a0; color: #c0c0f0; }
+
     #close-btn {
       background: none; border: none; color: #404060;
       cursor: pointer; font-size: 15px; line-height: 1;
-      padding: 3px 5px; border-radius: 4px;
-      transition: color .15s, background .15s; flex-shrink: 0;
+      padding: 3px 5px; border-radius: 4px; flex-shrink: 0;
+      transition: color .15s, background .15s;
     }
     #close-btn:hover { color: #c0c0e0; background: #22223a; }
 
     /* ── Tabs ── */
     .tabs {
-      display: flex;
-      background: #111120;
-      border-bottom: 1px solid #252538;
-      flex-shrink: 0;
+      display: flex; background: #111120;
+      border-bottom: 1px solid #252538; flex-shrink: 0;
     }
     .tab {
-      background: none; border: none;
-      color: #555578; cursor: pointer;
-      font-size: 11.5px; font-weight: 600;
-      letter-spacing: .4px;
-      padding: 8px 14px;
+      background: none; border: none; color: #555578;
+      cursor: pointer; font-size: 11.5px; font-weight: 600;
+      letter-spacing: .4px; padding: 8px 14px;
       border-bottom: 2px solid transparent;
       transition: color .15s, border-color .15s;
     }
@@ -69,39 +69,42 @@
     .panel { flex: 1; display: none; overflow-y: auto; }
     .panel.active { display: flex; flex-direction: column; }
 
-    /* notes */
     #notes {
       flex: 1; background: #16162a; border: none;
-      color: #cccce8; font-family: inherit;
-      font-size: 13px; line-height: 1.7;
-      padding: 14px; resize: none; outline: none;
+      color: #cccce8; font-family: inherit; font-size: 13px;
+      line-height: 1.7; padding: 14px; resize: none; outline: none;
     }
 
-    /* counters */
-    #panel-counters { padding: 14px; gap: 18px; }
+    #panel-counters { padding: 14px; }
+
+    .section { margin-bottom: 16px; }
     .section-title {
-      font-size: 10.5px; font-weight: 700;
-      color: #5a5a82; text-transform: uppercase;
-      letter-spacing: 1px; margin-bottom: 8px;
+      font-size: 10px; font-weight: 700; color: #5a5a82;
+      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px;
     }
-    .section { margin-bottom: 18px; }
 
-    .row {
-      display: flex; align-items: center;
-      gap: 8px; padding: 3px 0;
+    /* ── Inspiration (top-right) ── */
+    .insp-bar {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 9px; margin-bottom: 14px;
     }
-    .row-label {
-      font-size: 12px; color: #9090b8;
-      width: 56px; flex-shrink: 0;
+    .insp-label {
+      font-size: 10px; font-weight: 700; color: #6a6a40;
+      text-transform: uppercase; letter-spacing: 1px;
     }
-    .row-label.wide { width: 96px; }
+    .insp-val {
+      min-width: 26px; text-align: center;
+      font-size: 18px; font-weight: 700; color: #e0c060;
+      font-variant-numeric: tabular-nums;
+    }
 
-    .stepper { display: flex; align-items: center; gap: 6px; }
+    /* ── Steppers ── */
+    .stepper { display: flex; align-items: center; gap: 5px; }
     .step-btn {
-      width: 24px; height: 24px;
+      width: 22px; height: 22px;
       background: #222240; border: 1px solid #303058;
-      color: #9090c0; border-radius: 5px;
-      cursor: pointer; font-size: 15px; line-height: 1;
+      color: #9090c0; border-radius: 5px; cursor: pointer;
+      font-size: 14px; line-height: 1;
       display: flex; align-items: center; justify-content: center;
       transition: background .12s, color .12s;
       user-select: none; flex-shrink: 0;
@@ -109,75 +112,69 @@
     .step-btn:hover { background: #303060; color: #d0d0f0; }
     .step-btn:active { background: #3a3a72; }
 
+    /* ── Money (horizontal coins) ── */
+    .money-row { display: flex; gap: 8px; }
+    .coin {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 6px;
+      background: #11111e; border: 1px solid #222238;
+      border-radius: 8px; padding: 9px 4px 8px;
+    }
+    .coin-icon {
+      width: 26px; height: 26px; border-radius: 50%;
+      box-shadow: inset 0 -2px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.4);
+    }
+    .coin-icon.plat { background: radial-gradient(circle at 35% 30%, #eef2f8, #9aa4ba); }
+    .coin-icon.gold { background: radial-gradient(circle at 35% 30%, #ffe89a, #c08c18); }
+    .coin-icon.silv { background: radial-gradient(circle at 35% 30%, #eef0f4, #889098); }
+    .coin-icon.copp { background: radial-gradient(circle at 35% 30%, #f0b080, #a05828); }
+    .coin-val {
+      font-size: 15px; font-weight: 700; color: #d8d8f0;
+      font-variant-numeric: tabular-nums; line-height: 1;
+    }
+    .coin .stepper { gap: 4px; }
+    .coin .step-btn { width: 20px; height: 20px; font-size: 13px; }
+
+    /* ── Spell slots (2-col grid, fills width) ── */
+    .slots-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px 14px;
+    }
+    .slot-row {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .slot-row.empty { opacity: .4; }
+    .slot-label {
+      font-size: 11.5px; color: #9090b8; width: 34px; flex-shrink: 0;
+    }
+    .slot-row .stepper { margin-left: auto; }
+    .slot-row .step-btn { width: 20px; height: 20px; font-size: 13px; }
     .count-val {
-      min-width: 30px; text-align: center;
-      font-size: 14px; font-weight: 600; color: #d8d8f0;
+      min-width: 16px; text-align: center;
+      font-size: 13px; font-weight: 600; color: #d8d8f0;
       font-variant-numeric: tabular-nums;
     }
-
+    .slash { color: #44446a; font-size: 12px; }
     .slot-max {
-      width: 38px; background: #11111e;
+      width: 30px; background: #11111e;
       border: 1px solid #2a2a40; border-radius: 4px;
       color: #cccce8; font-family: inherit; font-size: 12px;
-      text-align: center; padding: 3px; outline: none;
+      text-align: center; padding: 2px; outline: none;
     }
     .slot-max:focus { border-color: #4040a0; }
-    .slash { color: #44446a; font-size: 13px; }
 
-    .slot-row.empty { opacity: .4; }
-
-    .inspire-val {
-      min-width: 40px; text-align: center;
-      font-size: 20px; font-weight: 700; color: #e0c060;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* ── Footer ── */
-    footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 7px 10px 7px 14px;
-      background: #111120; border-top: 1px solid #252538;
-      flex-shrink: 0; position: relative;
-    }
-    #status {
-      font-size: 11px; color: #383858;
-      transition: color .25s; min-width: 90px;
-    }
-    #status.saving { color: #b09020; }
-    #status.saved  { color: #30a060; }
-    #status.error  { color: #a03030; }
-
-    #save-btn {
-      background: #222240; border: 1px solid #333360;
-      border-radius: 5px; color: #8888c0; cursor: pointer;
-      font-size: 12px; padding: 4px 14px;
-      transition: background .15s, color .15s, border-color .15s;
-    }
-    #save-btn:hover { background: #303060; border-color: #4040a0; color: #c0c0f0; }
-
-    #resize-handle {
-      position: absolute; bottom: 0; right: 0;
-      width: 18px; height: 18px;
-      cursor: nwse-resize; opacity: .25; transition: opacity .2s;
-    }
-    #resize-handle:hover { opacity: .7; }
-    #resize-handle::before, #resize-handle::after {
-      content: ""; position: absolute; right: 3px;
-      background: #a0a0c8; border-radius: 1px;
-    }
-    #resize-handle::before { bottom: 7px; width: 10px; height: 1.5px; transform: rotate(45deg); }
-    #resize-handle::after  { bottom: 4px; width: 6px;  height: 1.5px; transform: rotate(45deg); }
-
-    /* scrollbar */
     .panel::-webkit-scrollbar { width: 8px; }
     .panel::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 4px; }
+    .slot-max::-webkit-inner-spin-button { opacity: .3; }
   </style>
-  <script type="module" crossorigin src="/assets/popover-DmTqsgoY.js"></script>
+  <script type="module" crossorigin src="/assets/popover-N6qYMCF9.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/lib-DGRDy4UO.js">
 </head>
 <body>
   <header>
     <div id="token-name">Заметки</div>
+    <span id="status"></span>
+    <button id="save-btn">Сохранить</button>
     <button id="close-btn" title="Закрыть">✕</button>
   </header>
 
@@ -186,40 +183,30 @@
     <button class="tab" data-tab="counters">Счётчики</button>
   </nav>
 
-  <!-- Notes panel -->
   <div class="panel active" id="panel-notes">
     <textarea id="notes"></textarea>
   </div>
 
-  <!-- Counters panel -->
   <div class="panel" id="panel-counters">
-    <div class="section" id="money-section">
-      <div class="section-title">Деньги</div>
-      <!-- rows injected -->
-    </div>
-
-    <div class="section" id="slots-section">
-      <div class="section-title">Ячейки заклинаний</div>
-      <!-- rows injected -->
-    </div>
-
-    <div class="section" id="inspire-section">
-      <div class="section-title">Вдохновение</div>
-      <div class="row">
-        <div class="stepper">
-          <button class="step-btn" id="insp-minus">−</button>
-          <span class="inspire-val" id="insp-val">0</span>
-          <button class="step-btn" id="insp-plus">+</button>
-        </div>
+    <div class="insp-bar">
+      <span class="insp-label">Вдохновение</span>
+      <div class="stepper">
+        <button class="step-btn" id="insp-minus">−</button>
+        <span class="insp-val" id="insp-val">0</span>
+        <button class="step-btn" id="insp-plus">+</button>
       </div>
     </div>
-  </div>
 
-  <footer>
-    <span id="status"></span>
-    <button id="save-btn">Сохранить</button>
-    <div id="resize-handle"></div>
-  </footer>
+    <div class="section">
+      <div class="section-title">Деньги</div>
+      <div class="money-row" id="money-section"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Ячейки заклинаний</div>
+      <div class="slots-grid" id="slots-section"></div>
+    </div>
+  </div>
 
 </body>
 </html>
