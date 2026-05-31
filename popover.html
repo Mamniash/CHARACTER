@@ -26,13 +26,11 @@
       overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
     #status {
-      font-size: 10.5px; color: #383858;
-      transition: color .25s; flex-shrink: 0;
-      min-width: 14px; text-align: right;
+      font-size: 13px; color: #30a060; flex-shrink: 0;
+      width: 14px; text-align: center; opacity: 0; transition: opacity .2s;
     }
-    #status.saving { color: #b09020; }
-    #status.saved  { color: #30a060; }
-    #status.error  { color: #a03030; }
+    #status.show { opacity: 1; }
+    #status.error { color: #a03030; }
 
     #save-btn {
       background: #222240; border: 1px solid #333360;
@@ -77,10 +75,14 @@
 
     #panel-counters { padding: 14px; }
 
-    .section { margin-bottom: 16px; }
+    .section { margin-bottom: 18px; }
+    .section-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 9px;
+    }
     .section-title {
       font-size: 10px; font-weight: 700; color: #5a5a82;
-      text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px;
+      text-transform: uppercase; letter-spacing: 1px;
     }
 
     /* ── Inspiration (top-right) ── */
@@ -111,69 +113,93 @@
     }
     .step-btn:hover { background: #303060; color: #d0d0f0; }
     .step-btn:active { background: #3a3a72; }
-
-    /* ── Money (horizontal coins) ── */
-    .money-row { display: flex; gap: 8px; }
-    .coin {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; gap: 6px;
-      background: #11111e; border: 1px solid #222238;
-      border-radius: 8px; padding: 9px 4px 8px;
-    }
-    .coin-icon {
-      width: 26px; height: 26px; border-radius: 50%;
-      box-shadow: inset 0 -2px 3px rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.4);
-    }
-    .coin-icon.plat { background: radial-gradient(circle at 35% 30%, #eef2f8, #9aa4ba); }
-    .coin-icon.gold { background: radial-gradient(circle at 35% 30%, #ffe89a, #c08c18); }
-    .coin-icon.silv { background: radial-gradient(circle at 35% 30%, #eef0f4, #889098); }
-    .coin-icon.copp { background: radial-gradient(circle at 35% 30%, #f0b080, #a05828); }
-    .coin-val {
-      font-size: 15px; font-weight: 700; color: #d8d8f0;
-      font-variant-numeric: tabular-nums; line-height: 1;
-    }
-    .coin .stepper { gap: 4px; }
-    .coin .step-btn { width: 20px; height: 20px; font-size: 13px; }
-
-    /* ── Spell slots (2-col grid, fills width) ── */
-    .slots-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 6px 14px;
-    }
-    .slot-row {
-      display: flex; align-items: center; gap: 6px;
-    }
-    .slot-row.empty { opacity: .4; }
-    .slot-label {
-      font-size: 11.5px; color: #9090b8; width: 34px; flex-shrink: 0;
-    }
-    .slot-row .stepper { margin-left: auto; }
-    .slot-row .step-btn { width: 20px; height: 20px; font-size: 13px; }
     .count-val {
-      min-width: 16px; text-align: center;
+      min-width: 18px; text-align: center;
       font-size: 13px; font-weight: 600; color: #d8d8f0;
       font-variant-numeric: tabular-nums;
     }
-    .slash { color: #44446a; font-size: 12px; }
+    .level-stepper .step-btn { width: 20px; height: 20px; font-size: 13px; }
+
+    /* ── Money (horizontal coin cards with inputs) ── */
+    .money-row { display: flex; gap: 8px; }
+    .coin {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      background: #11111e; border: 1px solid #222238;
+      border-radius: 8px; padding: 10px 5px 9px;
+    }
+    .coin-icon {
+      width: 30px; height: 30px; border-radius: 50%; position: relative;
+      box-shadow:
+        inset 0 0 0 2px rgba(0,0,0,.20),
+        inset 0 2px 3px rgba(255,255,255,.45),
+        inset 0 -3px 4px rgba(0,0,0,.32),
+        0 1px 2px rgba(0,0,0,.5);
+    }
+    .coin-icon::after {
+      content: ""; position: absolute; inset: 5px;
+      border-radius: 50%; border: 1px solid rgba(0,0,0,.18);
+    }
+    .coin-icon.plat { background: radial-gradient(circle at 36% 30%, #f2f5fa, #97a2b8); }
+    .coin-icon.gold { background: radial-gradient(circle at 36% 30%, #ffe79a, #b5870f); }
+    .coin-icon.silv { background: radial-gradient(circle at 36% 30%, #f0f2f6, #818a98); }
+    .coin-icon.copp { background: radial-gradient(circle at 36% 30%, #f2b486, #9c5223); }
+    .coin-input {
+      width: 100%; background: #16162c; border: 1px solid #2a2a44;
+      border-radius: 5px; color: #e0e0f4; font-family: inherit;
+      font-size: 14px; font-weight: 600; text-align: center;
+      padding: 4px 2px; outline: none;
+      font-variant-numeric: tabular-nums;
+    }
+    .coin-input:focus { border-color: #4040a0; }
+    .coin-input::-webkit-inner-spin-button { opacity: 0; width: 0; }
+
+    /* ── Spell slots (single column) ── */
+    .slot-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+    .slot-row.empty { opacity: .45; }
+    .slot-label { font-size: 12px; color: #9090b8; width: 52px; flex-shrink: 0; }
+    .slash { color: #44446a; font-size: 13px; }
     .slot-max {
-      width: 30px; background: #11111e;
-      border: 1px solid #2a2a40; border-radius: 4px;
-      color: #cccce8; font-family: inherit; font-size: 12px;
-      text-align: center; padding: 2px; outline: none;
+      width: 38px; background: #11111e; border: 1px solid #2a2a40;
+      border-radius: 4px; color: #cccce8; font-family: inherit;
+      font-size: 12px; text-align: center; padding: 3px; outline: none;
     }
     .slot-max:focus { border-color: #4040a0; }
+    .slot-max::-webkit-inner-spin-button { opacity: .3; }
+
+    /* ── Custom counters ── */
+    .custom-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
+    .custom-name {
+      flex: 1; min-width: 0; background: #11111e; border: 1px solid #2a2a40;
+      border-radius: 5px; color: #cccce8; font-family: inherit;
+      font-size: 12px; padding: 4px 8px; outline: none;
+    }
+    .custom-name:focus { border-color: #4040a0; }
+    .custom-name::placeholder { color: #333352; }
+    .del-btn {
+      width: 22px; height: 22px; background: none; border: none;
+      color: #4a3340; cursor: pointer; font-size: 13px; border-radius: 4px;
+      flex-shrink: 0; transition: color .12s, background .12s;
+    }
+    .del-btn:hover { color: #c06070; background: #2a1a22; }
+    .add-btn {
+      margin-top: 9px; width: 100%; background: #181830;
+      border: 1px dashed #313158; border-radius: 6px;
+      color: #6a6a98; cursor: pointer; font-size: 12px; padding: 7px;
+      transition: border-color .15s, color .15s;
+    }
+    .add-btn:hover { border-color: #5050a0; color: #a0a0d0; }
 
     .panel::-webkit-scrollbar { width: 8px; }
     .panel::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 4px; }
-    .slot-max::-webkit-inner-spin-button { opacity: .3; }
   </style>
-  <script type="module" crossorigin src="/assets/popover-N6qYMCF9.js"></script>
+  <script type="module" crossorigin src="/assets/popover-X_F4Uc8j.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/lib-DGRDy4UO.js">
 </head>
 <body>
   <header>
     <div id="token-name">Заметки</div>
-    <span id="status"></span>
+    <span id="status">✓</span>
     <button id="save-btn">Сохранить</button>
     <button id="close-btn" title="Закрыть">✕</button>
   </header>
@@ -203,8 +229,21 @@
     </div>
 
     <div class="section">
-      <div class="section-title">Ячейки заклинаний</div>
-      <div class="slots-grid" id="slots-section"></div>
+      <div class="section-head">
+        <div class="section-title">Ячейки заклинаний</div>
+        <div class="stepper level-stepper">
+          <button class="step-btn" id="lvl-minus">−</button>
+          <span class="count-val" id="lvl-val">5</span>
+          <button class="step-btn" id="lvl-plus">+</button>
+        </div>
+      </div>
+      <div id="slots-list"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Свои счётчики</div>
+      <div id="custom-list"></div>
+      <button class="add-btn" id="add-custom">+ счётчик</button>
     </div>
   </div>
 
