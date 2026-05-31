@@ -13,10 +13,15 @@
       display: flex; flex-direction: column;
     }
 
-    /* remove ugly number spinners everywhere */
     input[type=number] { -moz-appearance: textfield; appearance: textfield; }
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* unified custom scrollbar (panels + notes) */
+    .panel, #notes { scrollbar-width: thin; scrollbar-color: #2a2a44 transparent; }
+    .panel::-webkit-scrollbar, #notes::-webkit-scrollbar { width: 8px; }
+    .panel::-webkit-scrollbar-thumb, #notes::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 4px; }
+    .panel::-webkit-scrollbar-track, #notes::-webkit-scrollbar-track { background: transparent; }
 
     /* ── Header ── */
     header {
@@ -53,8 +58,7 @@
     .tab {
       background: none; border: none; color: #555578; cursor: pointer;
       font-size: 11px; font-weight: 600; letter-spacing: .3px; padding: 8px 12px;
-      border-bottom: 2px solid transparent; transition: color .15s, border-color .15s;
-      white-space: nowrap;
+      border-bottom: 2px solid transparent; transition: color .15s, border-color .15s; white-space: nowrap;
     }
     .tab:hover { color: #9090c0; }
     .tab.active { color: #c0c0f0; border-bottom-color: #5050a0; }
@@ -72,35 +76,38 @@
     #panel-counters, #panel-stats { padding: 14px; }
 
     .section { margin-bottom: 18px; }
-    .section-head {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px;
-    }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
     .section-title {
       font-size: 10px; font-weight: 700; color: #5a5a82;
       text-transform: uppercase; letter-spacing: 1px; margin-bottom: 9px;
     }
     .section-head .section-title { margin-bottom: 0; }
 
-    /* ── Inspiration / proficiency top bars ── */
-    .top-bar {
-      display: flex; align-items: center; justify-content: flex-end;
-      gap: 9px; margin-bottom: 14px;
-    }
-    .top-label {
-      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-    }
+    /* ── Top bars ── */
+    .top-bar { display: flex; align-items: center; justify-content: flex-end; gap: 9px; margin-bottom: 14px; }
+    .top-bar.split { justify-content: space-between; }
+    .prof-wrap { display: flex; align-items: center; gap: 9px; }
+    .top-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
     .insp-label { color: #6a6a40; }
     .prof-label { color: #5a5a82; }
-    .insp-val {
-      min-width: 26px; text-align: center; font-size: 18px; font-weight: 700;
-      color: #e0c060; font-variant-numeric: tabular-nums;
-    }
+    .insp-val { min-width: 26px; text-align: center; font-size: 18px; font-weight: 700; color: #e0c060; font-variant-numeric: tabular-nums; }
     .prof-input {
       width: 46px; background: #16162c; border: 1px solid #2a2a44; border-radius: 5px;
-      color: #d8d8f0; font-family: inherit; font-size: 15px; font-weight: 700;
-      text-align: center; padding: 4px; outline: none;
+      color: #d8d8f0; font-family: inherit; font-size: 15px; font-weight: 700; text-align: center; padding: 4px; outline: none;
     }
     .prof-input:focus { border-color: #4040a0; }
+
+    /* ── Advantage toggle ── */
+    .adv-toggle { display: flex; border: 1px solid #2a2a44; border-radius: 6px; overflow: hidden; }
+    .adv-toggle button {
+      background: #16162c; border: none; color: #6a6a92; font-family: inherit;
+      font-size: 11px; padding: 5px 9px; cursor: pointer; transition: background .12s, color .12s;
+    }
+    .adv-toggle button + button { border-left: 1px solid #2a2a44; }
+    .adv-toggle button:hover { color: #a0a0d0; }
+    .adv-toggle button.active { background: #303060; color: #d0d0f0; }
+    .adv-toggle button.active[data-mode="adv"] { background: #2e5232; color: #a8e0a8; }
+    .adv-toggle button.active[data-mode="dis"] { background: #52302e; color: #e0a8a8; }
 
     /* ── Steppers ── */
     .stepper { display: flex; align-items: center; gap: 5px; }
@@ -112,10 +119,7 @@
     }
     .step-btn:hover { background: #303060; color: #d0d0f0; }
     .step-btn:active { background: #3a3a72; }
-    .count-val {
-      min-width: 18px; text-align: center; font-size: 13px; font-weight: 600;
-      color: #d8d8f0; font-variant-numeric: tabular-nums;
-    }
+    .count-val { min-width: 18px; text-align: center; font-size: 13px; font-weight: 600; color: #d8d8f0; font-variant-numeric: tabular-nums; }
     .level-stepper .step-btn { width: 20px; height: 20px; font-size: 13px; }
 
     /* ── Money ── */
@@ -129,10 +133,7 @@
       box-shadow: inset 0 0 0 2px rgba(0,0,0,.20), inset 0 2px 3px rgba(255,255,255,.45),
         inset 0 -3px 4px rgba(0,0,0,.32), 0 1px 2px rgba(0,0,0,.5);
     }
-    .coin-icon::after {
-      content: ""; position: absolute; inset: 5px; border-radius: 50%;
-      border: 1px solid rgba(0,0,0,.18);
-    }
+    .coin-icon::after { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1px solid rgba(0,0,0,.18); }
     .coin-icon.plat { background: radial-gradient(circle at 36% 30%, #f2f5fa, #97a2b8); }
     .coin-icon.gold { background: radial-gradient(circle at 36% 30%, #ffe79a, #b5870f); }
     .coin-icon.silv { background: radial-gradient(circle at 36% 30%, #f0f2f6, #818a98); }
@@ -144,7 +145,7 @@
     }
     .coin-input:focus { border-color: #4040a0; }
 
-    /* ── Spell slots / hit dice rows ── */
+    /* ── Slots / hit dice ── */
     .slot-row { display: flex; align-items: center; gap: 8px; padding: 3px 0; }
     .slot-row.empty { opacity: .45; }
     .slot-label { font-size: 12px; color: #9090b8; width: 52px; flex-shrink: 0; }
@@ -155,31 +156,11 @@
       text-align: center; padding: 3px; outline: none; font-variant-numeric: tabular-nums;
     }
     .slot-max:focus { border-color: #4040a0; }
-    .die-select {
-      background: #16162c; border: 1px solid #2a2a44; border-radius: 5px;
-      color: #cccce8; font-family: inherit; font-size: 12px; padding: 3px 6px; outline: none;
-    }
-
-    /* ── Death saves ── */
-    .death-row { display: flex; align-items: center; gap: 10px; padding: 3px 0; }
-    .death-label { font-size: 12px; color: #9090b8; width: 64px; flex-shrink: 0; }
-    .pips { display: flex; gap: 7px; }
-    .pip {
-      font-size: 18px; cursor: pointer; line-height: 1; user-select: none;
-      transition: color .12s, transform .1s;
-    }
-    .pip:active { transform: scale(.85); }
-    .pip.succ { color: #2e2e44; }
-    .pip.succ.on { color: #4caf6a; }
-    .pip.fail { color: #2e2e44; }
-    .pip.fail.on { color: #c0504a; }
+    .die-select { background: #16162c; border: 1px solid #2a2a44; border-radius: 5px; color: #cccce8; font-family: inherit; font-size: 12px; padding: 3px 6px; outline: none; }
 
     /* ── Custom counters ── */
     .custom-row { display: flex; align-items: center; gap: 7px; padding: 3px 0; }
-    .drag-handle {
-      color: #353556; cursor: grab; font-size: 13px; flex-shrink: 0;
-      user-select: none; padding: 0 1px; letter-spacing: -2px;
-    }
+    .drag-handle { color: #353556; cursor: grab; font-size: 13px; flex-shrink: 0; user-select: none; padding: 0 1px; letter-spacing: -2px; }
     .drag-handle:active { cursor: grabbing; }
     .custom-row.dragging { opacity: .4; }
     .custom-name {
@@ -190,57 +171,45 @@
     .custom-name::placeholder { color: #333352; }
     .del-btn {
       width: 22px; height: 22px; background: none; border: none; color: #4a3340;
-      cursor: pointer; font-size: 13px; border-radius: 4px; flex-shrink: 0;
-      transition: color .12s, background .12s;
+      cursor: pointer; font-size: 13px; border-radius: 4px; flex-shrink: 0; transition: color .12s, background .12s;
     }
     .del-btn:hover { color: #c06070; background: #2a1a22; }
     .add-btn {
       margin-top: 9px; width: 100%; background: #181830; border: 1px dashed #313158;
-      border-radius: 6px; color: #6a6a98; cursor: pointer; font-size: 12px; padding: 7px;
-      transition: border-color .15s, color .15s;
+      border-radius: 6px; color: #6a6a98; cursor: pointer; font-size: 12px; padding: 7px; transition: border-color .15s, color .15s;
     }
     .add-btn:hover { border-color: #5050a0; color: #a0a0d0; }
 
-    /* ── Abilities (Stats tab) ── */
+    /* ── Abilities ── */
     .abil-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px; }
-    .abil-card {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      background: #11111e; border: 1px solid #222238; border-radius: 8px; padding: 8px 4px;
-    }
+    .abil-card { display: flex; flex-direction: column; align-items: center; gap: 4px; background: #11111e; border: 1px solid #222238; border-radius: 8px; padding: 8px 4px; }
     .abil-short { font-size: 9.5px; font-weight: 700; color: #6a6a92; letter-spacing: .5px; }
     .abil-mod {
       font-size: 20px; font-weight: 700; color: #d8d8f0; line-height: 1;
-      cursor: pointer; border-radius: 5px; padding: 2px 8px; transition: background .12s, color .12s;
+      cursor: pointer; border-radius: 5px; padding: 2px 8px; transition: background .12s, color .12s, opacity .12s;
       font-variant-numeric: tabular-nums;
     }
     .abil-mod:hover { background: #2a2a4a; color: #e8e8ff; }
-    .abil-score {
-      width: 40px; background: #16162c; border: 1px solid #2a2a44; border-radius: 4px;
-      color: #9898c0; font-family: inherit; font-size: 12px; font-weight: 600;
-      text-align: center; padding: 2px; outline: none;
-    }
+    .abil-score { width: 40px; background: #16162c; border: 1px solid #2a2a44; border-radius: 4px; color: #9898c0; font-family: inherit; font-size: 12px; font-weight: 600; text-align: center; padding: 2px; outline: none; }
     .abil-score:focus { border-color: #4040a0; }
 
     .save-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; }
     .stat-row { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
-    .prof-dot {
-      width: 13px; height: 13px; border-radius: 50%; border: 2px solid #3a3a5c;
-      cursor: pointer; flex-shrink: 0; transition: background .12s, border-color .12s;
-    }
-    .prof-dot.on { background: #6a6ad0; border-color: #6a6ad0; }
+    .prof-dot { width: 13px; height: 13px; border-radius: 50%; border: 2px solid #3a3a5c; cursor: pointer; flex-shrink: 0; transition: background .12s, border-color .12s; }
+    .prof-dot.lvl1 { background: #6a6ad0; border-color: #6a6ad0; }
+    .prof-dot.lvl2 { background: #d0a83c; border-color: #e8c860; box-shadow: inset 0 0 0 2px #11111e; }
+    .prof-dot.lvl3 { background: linear-gradient(90deg, #6a6ad0 50%, transparent 50%); border-color: #6a6ad0; }
     .roll-mod {
-      min-width: 30px; text-align: center; font-size: 13px; font-weight: 600;
-      color: #c0c0e8; cursor: pointer; border-radius: 4px; padding: 1px 4px;
-      font-variant-numeric: tabular-nums; transition: background .12s, color .12s; flex-shrink: 0;
+      min-width: 30px; text-align: center; font-size: 13px; font-weight: 600; color: #c0c0e8;
+      cursor: pointer; border-radius: 4px; padding: 1px 4px; font-variant-numeric: tabular-nums;
+      transition: background .12s, color .12s, opacity .12s; flex-shrink: 0;
     }
     .roll-mod:hover { background: #2a2a4a; color: #e8e8ff; }
+    .roll-mod.locked, .abil-mod.locked { pointer-events: none; opacity: .4; }
     .row-name { font-size: 12px; color: #b0b0d0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .ab-tag { font-size: 10px; color: #50506e; margin-left: 3px; }
-
-    .panel::-webkit-scrollbar { width: 8px; }
-    .panel::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 4px; }
   </style>
-  <script type="module" crossorigin src="/assets/popover-BIa_R-DY.js"></script>
+  <script type="module" crossorigin src="/assets/popover-CMHecN1U.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/lib-DGRDy4UO.js">
 </head>
 <body>
@@ -291,18 +260,6 @@
     </div>
 
     <div class="section">
-      <div class="section-title">Спасброски от смерти</div>
-      <div class="death-row">
-        <span class="death-label">Успехи</span>
-        <div class="pips" id="ds-success"></div>
-      </div>
-      <div class="death-row">
-        <span class="death-label">Провалы</span>
-        <div class="pips" id="ds-fail"></div>
-      </div>
-    </div>
-
-    <div class="section">
       <div class="section-head">
         <div class="section-title">Кубы хитов</div>
         <select class="die-select" id="hd-die">
@@ -321,9 +278,16 @@
 
   <!-- STATS -->
   <div class="panel" id="panel-stats">
-    <div class="top-bar">
-      <span class="top-label prof-label">Бонус мастерства</span>
-      <input class="prof-input" id="prof-input" type="number" value="2" />
+    <div class="top-bar split">
+      <div class="adv-toggle" id="adv-toggle">
+        <button data-mode="dis" title="Помеха">Пом</button>
+        <button data-mode="normal" class="active" title="Обычный">Обыч</button>
+        <button data-mode="adv" title="Преимущество">Прев</button>
+      </div>
+      <div class="prof-wrap">
+        <span class="top-label prof-label">Мастерство</span>
+        <input class="prof-input" id="prof-input" type="number" value="2" />
+      </div>
     </div>
 
     <div class="abil-grid" id="abil-grid"></div>
